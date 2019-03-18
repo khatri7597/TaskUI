@@ -1,0 +1,22 @@
+.top-margin {
+    margin-top: 20px;
+    width: 150px;   
+}
+
+.btnwidth{
+    width: 120px;
+}
+
+.labelMagrinTop{
+    margin-top: 10px;
+}
+
+.successMessgae{
+    color: green;
+    font-size: 20px;
+}
+
+.errorCls{
+    margin-top: 7px;
+    color: red;
+}

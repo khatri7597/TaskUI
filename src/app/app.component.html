@@ -1,21 +1,89 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="container">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-5"><h2>Weather Search</h2></div>
+    </div>
+    <hr>
+  </div>
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+    <div class="form-group row">
+      <label class="col-sm-2 control-label labelMagrinTop">City Name</label>
+      <div class="col-xs-12 col-md-5 col-lg-4">
+        <input class="form-control" formControlName="cityName" id="cityName" type="text"
+        [ngClass]="{ 'is-invalid': submitted && f.cityName.errors }" placeholder="City Name">
+      </div>
+      <div *ngIf="submitted && f.cityName.errors" class="invalid-feedback errorCls">
+          <div *ngIf="f.cityName.errors.required">City Name is required</div>
+      </div>
+    </div>  
+    <div class="form-group row">
+        <label for="disabledInput" class="col-sm-2 control-label labelMagrinTop">Start Date</label>
+        <div class="col-xs-12 col-md-5 col-lg-4">
+          <input
+            class="form-control"
+            #dpFull="bsDatepicker"
+            bsDatepicker
+            formControlName="startDate"
+            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY, h:mm:ss a' }">
+        </div>
+      </div>
+    <div class="form-group row">
+      <label for="disabledInput" class="col-sm-2 control-label labelMagrinTop">End Date</label>
+      <div class="col-xs-12 col-md-5 col-lg-4">
+        <input
+          class="form-control"
+          #dpFull="bsDatepicker"
+          bsDatepicker
+          formControlName="endDate"
+          [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY, h:mm:ss a' }">
+      </div>
+    </div>
+    <hr>
+    <div class="form-group row">
+        <div class="col-sm-2" style="margin-left: 20px;">
+          <button type="submit" class="btn btnwidth" >Get History</button>
+        </div>
+        <div class="col-sm-2" *ngIf="tableFlag">
+          <button type="button" class="btn btnwidth" (click) = 'saveData()' [disabled]="disableSaveButton" >Save Data</button>
+        </div>
+        <div class="col-sm-2" *ngIf="tableFlag" >
+            <button type="button" class="btn btnwidth" [disabled]="disableExportButton" (click)='downloadWeatherPdf()'>Export as PDF</button>
+        </div>
+        <div class="col-sm-5 successMessgae" *ngIf="dataSavesuccess" >
+            <p>Data Saved Success.</p>
+        </div>
+    </div>
+    <hr>
+  </form>
 
-<router-outlet></router-outlet>
+  <div class="container" *ngIf="tableFlag">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Time</th>
+          <th scope="col">Name</th>
+          <th scope="col">Weather</th>
+          <th scope="col">Temperature</th>
+          <th scope="col">Min/Max Temperature</th>
+          <th scope="col">Pressure</th>
+          <th scope="col">Airspeed</th>
+          <th scope="col">Humidity</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let item of weatherContent">
+          <tr>
+            <td>{{item.date | date:'dd/MM/yyyy hh:mm a'}}</td>
+            <td>{{item.cityName}}</td>
+            <td>{{item.weather}}</td>
+            <td>{{item.temprature}}</td>
+            <td>{{item.minT}}/{{item.maxT}}</td>
+            <td>{{item.pressure}}</td>
+            <td>{{item.airspeed}}</td>
+            <td>{{item.humidity}}</td>
+          </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
